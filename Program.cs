@@ -2,7 +2,10 @@
 {
     internal class Program
     {
+        //constants
         const int GRID_SIZE = 3;
+        const char EMPTY_CELL = '-'; 
+
         static char[,] grid = new char[GRID_SIZE, GRID_SIZE];
 
         static void Main(string[] args)
@@ -34,7 +37,7 @@
             {
                 for (int j = 0; j < GRID_SIZE; j++)
                 {
-                    grid[i, j] = '-'; // Initialize each cell with '-'
+                    grid[i, j] = EMPTY_CELL; // Initialize each cell with '-'
                 }
             }
         }
@@ -59,24 +62,36 @@
 
             while (!validInput)
             {
-                Console.Write("Enter the row (0-2): ");
-                row = int.Parse(Console.ReadLine());
-
-                Console.Write("Enter the column (0-2): ");
-                col = int.Parse(Console.ReadLine());
-
-                if (row >= 0 && row < GRID_SIZE && col >= 0 && col < GRID_SIZE && grid[row, col] == '-')
+                try
                 {
-                    validInput = true;
+                    Console.Write($"Enter the row (1-{GRID_SIZE}): ");
+                    row = int.Parse(Console.ReadLine()) - 1; // Convert to 0-based index
+
+                    Console.Write($"Enter the column (1-{GRID_SIZE}): ");
+                    col = int.Parse(Console.ReadLine()) - 1; // Convert to 0-based index
+
+                    if (row >= 0 && row < GRID_SIZE && col >= 0 && col < GRID_SIZE && grid[row, col] == EMPTY_CELL)
+                    {
+                        validInput = true;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid move! The cell is already occupied or out of range. Try again.");
+                    }
                 }
-                else
+                catch (FormatException)
                 {
-                    Console.WriteLine("Invalid move! Try again.");
+                    Console.WriteLine("Invalid input! Please enter a number.");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"An unexpected error occurred: {ex.Message}");
                 }
             }
 
             return (row, col);
         }
+
 
         static void PlaceMove(int row, int col, char player)
         {
