@@ -4,7 +4,9 @@
     {
         //constants
         const int GRID_SIZE = 3;
-        const char EMPTY_CELL = '-'; 
+        const char EMPTY_CELL = '-';
+        const string PLAYER_VS_PLAYER = "1";
+        const string PLAYER_VS_AI = "2";
 
         static char[,] grid = new char[GRID_SIZE, GRID_SIZE];
 
@@ -13,13 +15,27 @@
             InitializeGrid();
             char currentPlayer = 'X';
             bool gameWon = false;
+            bool againstAI = IsPlayingAgainstAI();
 
             for (int i = 0; i < GRID_SIZE * GRID_SIZE; i++) // Maximum of 9 moves
             {
                 Console.Clear();
                 DisplayGrid();
 
-                var (row, col) = GetPlayerMove();
+                int row, col;
+
+                if (currentPlayer == 'O' && againstAI)
+                {
+                    // AI's turn
+                    Console.WriteLine("AI is making a move...");
+                    (row, col) = GetAIMove();
+                }
+                else
+                {
+                    // Player's turn
+                    (row, col) = GetPlayerMove();
+                }
+
                 PlaceMove(row, col, currentPlayer);
 
                 // Check if the current player has won
@@ -71,6 +87,35 @@
             }
         }
 
+        static bool IsPlayingAgainstAI()
+        {
+
+            string input = string.Empty;
+            bool validInput = false;
+
+            while (!validInput)
+            {
+                Console.WriteLine("Choose game mode:");
+                Console.WriteLine($"{PLAYER_VS_PLAYER}: Player vs Player");
+                Console.WriteLine($"{PLAYER_VS_AI}: Player vs AI");
+                Console.Write("Enter your choice (1 or 2): ");
+
+                input = Console.ReadLine();
+
+                if (input == PLAYER_VS_PLAYER || input == PLAYER_VS_AI)
+                {
+                    validInput = true;
+                }
+                else
+                {
+                    Console.WriteLine("Invalid choice. Please enter 1 for Player vs Player or 2 for Player vs AI.");
+                }
+            }
+
+            return input == PLAYER_VS_AI;
+        }
+
+
         static (int, int) GetPlayerMove()
         {
             int row = -1, col = -1;
@@ -106,6 +151,22 @@
             }
 
             return (row, col);
+        }
+
+        static (int, int) GetAIMove()
+        {
+            for (int i = 0; i < GRID_SIZE; i++)
+            {
+                for (int j = 0; j < GRID_SIZE; j++)
+                {
+                    if (grid[i, j] == EMPTY_CELL)
+                    {
+                        return (i, j);
+                    }
+                }
+            }
+
+            return (-1, -1); // Should never reach here if there's at least one empty cell
         }
 
 
