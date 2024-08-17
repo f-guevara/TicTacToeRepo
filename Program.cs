@@ -12,6 +12,7 @@
         {
             InitializeGrid();
             char currentPlayer = 'X';
+            bool gameWon = false;
 
             for (int i = 0; i < GRID_SIZE * GRID_SIZE; i++) // Maximum of 9 moves
             {
@@ -21,8 +22,23 @@
                 var (row, col) = GetPlayerMove();
                 PlaceMove(row, col, currentPlayer);
 
+                // Check if the current player has won
+                if (CheckWin(currentPlayer))
+                {
+                    Console.Clear();
+                    DisplayGrid();
+                    Console.WriteLine($"Player {currentPlayer} wins!");
+                    gameWon = true;
+                    break;
+                }
+
                 // Alternate between players
                 currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
+            }
+
+            if (!gameWon)
+            {
+                Console.WriteLine("It's a draw!");
             }
 
             Console.WriteLine("Game Over! Press any key to exit.");
@@ -97,6 +113,43 @@
         {
             grid[row, col] = player;
         }
+
+        static bool CheckWin(char player)
+        {
+            // Check rows for a win
+            for (int i = 0; i < GRID_SIZE; i++)
+            {
+                if (grid[i, 0] == player && grid[i, 1] == player && grid[i, 2] == player)
+                {
+                    return true;
+                }
+            }
+
+            // Check columns for a win
+            for (int j = 0; j < GRID_SIZE; j++)
+            {
+                if (grid[0, j] == player && grid[1, j] == player && grid[2, j] == player)
+                {
+                    return true;
+                }
+            }
+
+            // Check main diagonal for a win
+            if (grid[0, 0] == player && grid[1, 1] == player && grid[2, 2] == player)
+            {
+                return true;
+            }
+
+            // Check anti-diagonal for a win
+            if (grid[0, 2] == player && grid[1, 1] == player && grid[2, 0] == player)
+            {
+                return true;
+            }
+
+            // No win found
+            return false;
+        }
+
 
     }
 }
