@@ -155,19 +155,69 @@
 
         static (int, int) GetAIMove()
         {
+            // Try to win
+            var winningMove = FindWinningMove('O');
+            if (winningMove != (-1, -1))
+                return winningMove;
+
+            // Try to block the player from winning
+            var blockingMove = FindWinningMove('X');
+            if (blockingMove != (-1, -1))
+                return blockingMove;
+
+            // Take the center if available
+            if (grid[1, 1] == EMPTY_CELL)
+                return (1, 1);
+
+            // Take a corner if available
+            var cornerMove = FindCornerMove();
+            if (cornerMove != (-1, -1))
+                return cornerMove;
+
+            // Take any available spot
+            for (int i = 0; i < GRID_SIZE; i++)
+            {
+                for (int j = 0; j < GRID_SIZE; j++)
+                {
+                    if (grid[i, j] == EMPTY_CELL)
+                        return (i, j);
+                }
+            }
+
+            return (-1, -1); // Should never reach here
+        }
+
+        static (int, int) FindWinningMove(char player)
+        {
             for (int i = 0; i < GRID_SIZE; i++)
             {
                 for (int j = 0; j < GRID_SIZE; j++)
                 {
                     if (grid[i, j] == EMPTY_CELL)
                     {
-                        return (i, j);
+                        grid[i, j] = player; // Temporarily make the move
+                        if (CheckWin(player))
+                        {
+                            grid[i, j] = EMPTY_CELL; // Undo the move
+                            return (i, j);
+                        }
+                        grid[i, j] = EMPTY_CELL; // Undo the move
                     }
                 }
             }
-
-            return (-1, -1); // Should never reach here if there's at least one empty cell
+            return (-1, -1); // No winning move found
         }
+
+        static (int, int) FindCornerMove()
+        {
+            if (grid[0, 0] == EMPTY_CELL) return (0, 0);
+            if (grid[0, 2] == EMPTY_CELL) return (0, 2);
+            if (grid[2, 0] == EMPTY_CELL) return (2, 0);
+            if (grid[2, 2] == EMPTY_CELL) return (2, 2);
+
+            return (-1, -1); // No corner available
+        }
+
 
 
         static void PlaceMove(int row, int col, char player)
