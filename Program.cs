@@ -5,6 +5,8 @@
         //constants
         const int GRID_SIZE = 3;
         const char EMPTY_CELL = '-';
+        const char PLAYER_X = 'X';
+        const char PLAYER_O = 'O';
         const string PLAYER_VS_PLAYER = "1";
         const string PLAYER_VS_AI = "2";
 
@@ -13,7 +15,7 @@
         static void Main(string[] args)
         {
             InitializeGrid();
-            char currentPlayer = 'X';
+            char currentPlayer = PLAYER_X;
             bool gameWon = false;
             bool againstAI = IsPlayingAgainstAI();
 
@@ -24,7 +26,7 @@
 
                 int row, col;
 
-                if (currentPlayer == 'O' && againstAI)
+                if (currentPlayer == PLAYER_O && againstAI)
                 {
                     // AI's turn
                     Console.WriteLine("AI is making a move...");
@@ -49,7 +51,7 @@
                 }
 
                 // Alternate between players
-                currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
+                currentPlayer = (currentPlayer == PLAYER_X) ? PLAYER_O : PLAYER_X;
             }
 
             if (!gameWon)
@@ -98,7 +100,7 @@
                 Console.WriteLine("Choose game mode:");
                 Console.WriteLine($"{PLAYER_VS_PLAYER}: Player vs Player");
                 Console.WriteLine($"{PLAYER_VS_AI}: Player vs AI");
-                Console.Write("Enter your choice (1 or 2): ");
+                Console.Write($"Enter your choice ({PLAYER_VS_PLAYER} or {PLAYER_VS_AI}): ");
 
                 input = Console.ReadLine();
 
