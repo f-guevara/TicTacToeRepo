@@ -34,19 +34,7 @@ To run the Tic Tac Toe game, you’ll need:
 1. Clone the repository:
    ```sh
    git clone https://github.com/yourusername/tic-tac-toe.git
-Navigate to the project directory:
-sh
-Copy code
-cd tic-tac-toe
-Build the project:
-sh
-Copy code
-dotnet build
-Run the game:
-sh
-Copy code
-dotnet run
-   
+
 2. Navigate to the Project Directory
    ```sh
    cd tic-tac-toe
