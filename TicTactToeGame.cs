@@ -58,8 +58,69 @@ public class TicTacToeGame
                 ConsoleUI.DisplayMessage("Invalid input. Please enter 'y' or 'n'.");
         }
     }
+    public bool IsPositionAvailable(int position)
+    {
+        int row = position / 3;
+        int col = position % 3;
+        return _grid[row, col] == ' '; // Returns true if the position is empty
+    }
+
 
     public int GetAIMove()
+    {
+        // 1. Win: If AI can win, take that move
+        int winningMove = FindWinningMove('O');
+        if (winningMove != -1)
+            return winningMove;
+
+        // 2. Block: If player is about to win, block them
+        int blockingMove = FindWinningMove('X');
+        if (blockingMove != -1)
+            return blockingMove;
+
+        // 3. Take center if available
+        if (_grid[1, 1] == ' ')
+            return 4;  // Center position is 4 (1,1)
+
+        // 4. Take a corner if available
+        int cornerMove = GetCornerMove();
+        if (cornerMove != -1)
+            return cornerMove;
+
+        // 5. Take a random move
+        return GetRandomMove();
+    }
+
+    private int FindWinningMove(char symbol)
+    {
+        for (int i = 0; i < 9; i++)
+        {
+            if (_grid[i / 3, i % 3] == ' ')
+            {
+                _grid[i / 3, i % 3] = symbol;
+                bool isWin = IsWin();
+                Console.WriteLine($"Testing move at {i}: {(isWin ? "Winning move!" : "Not a win")}");
+                _grid[i / 3, i % 3] = ' '; // Undo move
+
+                if (isWin)
+                    return i;
+            }
+        }
+        return -1;
+    }
+
+    private int GetCornerMove()
+    {
+        int[] corners = { 0, 2, 6, 8 };
+        foreach (int corner in corners)
+        {
+            if (_grid[corner / 3, corner % 3] == ' ')
+                return corner;
+        }
+        return -1;
+    }
+
+    private int GetRandomMove()
     {
         Random random = new Random();
         int move;

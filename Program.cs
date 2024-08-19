@@ -19,7 +19,7 @@
                 int move;
                 if (isPlayerOneTurn || !playingAgainstAI)
                 {
-                    move = ConsoleUI.GetPlayerMove(currentPlayer);
+                    move = ConsoleUI.GetPlayerMove(currentPlayer, game);
                 }
                 else
                 {

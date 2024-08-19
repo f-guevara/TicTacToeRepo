@@ -28,15 +28,28 @@ public static class ConsoleUI
         }
     }
 
-    public static int GetPlayerMove(string playerName)
+    public static int GetPlayerMove(string playerName, TicTacToeGame game)
     {
         while (true)
         {
             string input = GetInput($"{playerName}, enter your move (1-9): ");
             if (int.TryParse(input, out int move) && move >= 1 && move <= 9)
-                return move - 1; // Adjust for 0-based index
+            {
+                move -= 1; // Adjust for 0-based index
+
+                if (!game.IsPositionAvailable(move))
+                {
+                    DisplayMessage("That position is already taken. Please choose another.");
+                    continue;
+                }
+
+                return move;
+            }
             else
+            {
                 DisplayMessage("Invalid input. Please enter a number between 1 and 9.");
+            }
         }
     }
+
 }
