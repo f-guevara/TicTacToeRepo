@@ -1,17 +1,6 @@
 // ConsoleUI.cs
 public static class ConsoleUI
 {
-    public static void DisplayMessage(string message)
-    {
-        Console.WriteLine(message);
-    }
-
-    public static string GetInput(string prompt)
-    {
-        Console.Write(prompt);
-        return Console.ReadLine();
-    }
-
     public static void DisplayGrid(char[,] grid)
     {
         for (int row = 0; row < grid.GetLength(0); row++)
@@ -20,36 +9,12 @@ public static class ConsoleUI
             {
                 Console.Write(grid[row, col]);
                 if (col < grid.GetLength(1) - 1)
-                    Console.Write(" | ");
+                    Console.Write(" | "); // Display column separator
             }
-            Console.WriteLine();
+            Console.WriteLine(); // New line after each row
+
             if (row < grid.GetLength(0) - 1)
-                Console.WriteLine("---------");
+                Console.WriteLine("---------"); // Display row separator
         }
     }
-
-    public static int GetPlayerMove(string playerName, TicTacToeGame game)
-    {
-        while (true)
-        {
-            string input = GetInput($"{playerName}, enter your move (1-9): ");
-            if (int.TryParse(input, out int move) && move >= 1 && move <= 9)
-            {
-                move -= 1; // Adjust for 0-based index
-
-                if (!game.IsPositionAvailable(move))
-                {
-                    DisplayMessage("That position is already taken. Please choose another.");
-                    continue;
-                }
-
-                return move;
-            }
-            else
-            {
-                DisplayMessage("Invalid input. Please enter a number between 1 and 9.");
-            }
-        }
-    }
-
 }

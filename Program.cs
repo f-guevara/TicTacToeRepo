@@ -1,57 +1,29 @@
-﻿namespace TicTacToe
+﻿
+namespace TicTacToe
 {
     internal class Program
     {
         static void Main(string[] args)
         {
-            bool playingAgainstAI = TicTacToeGame.IsPlayingAgainstAI();
-            var game = new TicTacToeGame(playingAgainstAI);
-            bool isPlayerOneTurn = true;
+            // Step 1: Initialize the grid (3x3)
+            char[,] grid = new char[3, 3];
 
-            while (true)
+            // Fill the grid with empty spaces
+            for (int row = 0; row < 3; row++)
             {
-                Console.Clear();
-                ConsoleUI.DisplayGrid(game.GetGrid());
-
-                string currentPlayer = isPlayerOneTurn ? "Player 1" : "Player 2";
-                char currentSymbol = isPlayerOneTurn ? 'X' : 'O';
-
-                int move;
-                if (isPlayerOneTurn || !playingAgainstAI)
+                for (int col = 0; col < 3; col++)
                 {
-                    move = ConsoleUI.GetPlayerMove(currentPlayer, game);
+                    grid[row, col] = ' ';
                 }
-                else
-                {
-                    move = game.GetAIMove();
-                    ConsoleUI.DisplayMessage($"AI chose position {move + 1}");
-                }
-
-                game.MakeMove(move, currentSymbol);
-
-                if (game.IsWin())
-                {
-                    Console.Clear();
-                    ConsoleUI.DisplayGrid(game.GetGrid());
-                    ConsoleUI.DisplayMessage($"{currentPlayer} wins!");
-                    break;
-                }
-
-                if (game.IsDraw())
-                {
-                    Console.Clear();
-                    ConsoleUI.DisplayGrid(game.GetGrid());
-                    ConsoleUI.DisplayMessage("The game is a draw!");
-                    break;
-                }
-
-                isPlayerOneTurn = !isPlayerOneTurn;
             }
-            ConsoleUI.DisplayMessage("Press any key to exit...");
+
+            // Step 2: Display the grid using the UI class
+            ConsoleUI.DisplayGrid(grid);
+
+            // Step 3: Keep the console open
+            Console.WriteLine("Press any key to exit...");
             Console.ReadKey();
         }
     }
-
 }
-
 
