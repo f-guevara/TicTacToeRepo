@@ -6,7 +6,7 @@
         {
             const string PLAYER_1_WINS = "Player 1";
             const string PLAYER_2_WINS = "Player 2";
-            const string AI_WINS = "AI";
+            const string AI_WINS = "AI";   //just add this comment to make a commit
 
             char[] grid = TicTacToeGame.InitializeGrid();
             bool isPlayerOneTurn = true;
