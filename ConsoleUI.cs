@@ -1,6 +1,33 @@
 public static class ConsoleUI
 {
     private const int MIN_MOVE = 1;
+    private const int TWO_PLAYERS_MODE = 1;
+    private const int PLAY_AGAINST_AI = 2;
+
+    public static bool AskForGameMode()
+    {
+        DisplayMessage("Choose game mode: ");
+        DisplayMessage($"{TWO_PLAYERS_MODE}. Play against another player");
+        DisplayMessage($"{PLAY_AGAINST_AI}. Play against AI");
+
+        while (true)
+        {
+            string input = Console.ReadLine();
+            if (input == TWO_PLAYERS_MODE)
+            {
+                return false; // Play against another player
+            }
+            else if (input == PLAY_AGAINST_AI)
+            {
+                return true; // Play against AI
+            }
+            else
+            {
+                DisplayMessage(""Invalid input. Please enter {TWO_PLAYERS_MODE } or { PLAY_AGAINST_AI}.");
+            }
+        }
+    }
+
 
     public static void DisplayMessage(string message)
     {

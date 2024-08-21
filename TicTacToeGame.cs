@@ -60,5 +60,68 @@ public static class TicTacToeGame
     {
         return isPlayerOneTurn ? PLAYER_1_SYMBOL : PLAYER_2_SYMBOL;
     }
+
+    // AI logic
+    public static int GetBestMove(char[] grid)
+    {
+        // Priority 1: Check if AI can win
+        for (int i = 0; i < TOTAL_POSITIONS; i++)
+        {
+            if (IsPositionAvailable(grid, i))
+            {
+                grid[i] = PLAYER_2_SYMBOL; // Assume AI is PLAYER_2_SYMBOL
+                if (CheckWin(grid, PLAYER_2_SYMBOL))
+                {
+                    grid[i] = EMPTY_SYMBOL; // Undo the move
+                    return i; // Return winning move
+                }
+                grid[i] = EMPTY_SYMBOL; // Undo the move
+            }
+        }
+
+        // Priority 2: Check if AI needs to block the player
+        for (int i = 0; i < TOTAL_POSITIONS; i++)
+        {
+            if (IsPositionAvailable(grid, i))
+            {
+                grid[i] = PLAYER_1_SYMBOL; // Assume player is PLAYER_1_SYMBOL
+                if (CheckWin(grid, PLAYER_1_SYMBOL))
+                {
+                    grid[i] = EMPTY_SYMBOL; // Undo the move
+                    return i; // Return blocking move
+                }
+                grid[i] = EMPTY_SYMBOL; // Undo the move
+            }
+        }
+
+        // Priority 3: Take the center if available
+        int centerPosition = GRID_SIZE_VALUE * GRID_SIZE_VALUE / 2;
+        if (IsPositionAvailable(grid, centerPosition))
+        {
+            return centerPosition;
+        }
+
+        // Priority 4: Take any available corner
+        int[] corners = { 0, 2, 6, 8 };
+        foreach (int corner in corners)
+        {
+            if (IsPositionAvailable(grid, corner))
+            {
+                return corner;
+            }
+        }
+
+        // Priority 5: Take any available position
+        for (int i = 0; i < TOTAL_POSITIONS; i++)
+        {
+            if (IsPositionAvailable(grid, i))
+            {
+                return i;
+            }
+        }
+
+        return -1; // Should never happen as we assume AI only calls this when it can make a move
+    }
+
 }
 
