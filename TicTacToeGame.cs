@@ -64,35 +64,12 @@ public static class TicTacToeGame
     // AI logic
     public static int GetBestMove(char[] grid)
     {
-        // Priority 1: Check if AI can win
-        for (int i = 0; i < TOTAL_POSITIONS; i++)
-        {
-            if (IsPositionAvailable(grid, i))
-            {
-                grid[i] = PLAYER_2_SYMBOL; // Assume AI is PLAYER_2_SYMBOL
-                if (CheckWin(grid, PLAYER_2_SYMBOL))
-                {
-                    grid[i] = EMPTY_SYMBOL; // Undo the move
-                    return i; // Return winning move
-                }
-                grid[i] = EMPTY_SYMBOL; // Undo the move
-            }
-        }
+        // Check if AI can win or needs to block the player
+        int winningMove = FindBestMove(grid, PLAYER_2_SYMBOL); // Priority 1: AI tries to win
+        if (winningMove != -1) return winningMove;
 
-        // Priority 2: Check if AI needs to block the player
-        for (int i = 0; i < TOTAL_POSITIONS; i++)
-        {
-            if (IsPositionAvailable(grid, i))
-            {
-                grid[i] = PLAYER_1_SYMBOL; // Assume player is PLAYER_1_SYMBOL
-                if (CheckWin(grid, PLAYER_1_SYMBOL))
-                {
-                    grid[i] = EMPTY_SYMBOL; // Undo the move
-                    return i; // Return blocking move
-                }
-                grid[i] = EMPTY_SYMBOL; // Undo the move
-            }
-        }
+        int blockingMove = FindBestMove(grid, PLAYER_1_SYMBOL); // Priority 2: AI blocks player
+        if (blockingMove != -1) return blockingMove;
 
         // Priority 3: Take the center if available
         int centerPosition = GRID_SIZE_VALUE * GRID_SIZE_VALUE / 2;
@@ -102,7 +79,7 @@ public static class TicTacToeGame
         }
 
         // Priority 4: Take any available corner
-        int[] corners = { 0, 2, 6, 8 };
+        int[] corners = GetCornerPositions(GRID_SIZE_VALUE);
         foreach (int corner in corners)
         {
             if (IsPositionAvailable(grid, corner))
@@ -122,6 +99,36 @@ public static class TicTacToeGame
 
         return -1; // Should never happen as we assume AI only calls this when it can make a move
     }
+
+    private static int[] GetCornerPositions(int gridSize)
+    {
+        return new int[]
+        {
+        0,                           // Top-left corner
+        gridSize - 1,                // Top-right corner
+        gridSize * (gridSize - 1),   // Bottom-left corner
+        gridSize * gridSize - 1      // Bottom-right corner
+        };
+    }
+
+    private static int FindBestMove(char[] grid, char symbol)
+    {
+        for (int i = 0; i < TOTAL_POSITIONS; i++)
+        {
+            if (IsPositionAvailable(grid, i))
+            {
+                grid[i] = symbol;
+                if (CheckWin(grid, symbol))
+                {
+                    grid[i] = EMPTY_SYMBOL; // Undo the move
+                    return i; // Return the best move
+                }
+                grid[i] = EMPTY_SYMBOL; // Undo the move
+            }
+        }
+        return -1; // No winning/blocking move found
+    }
+
 
 }
 

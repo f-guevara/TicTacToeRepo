@@ -13,18 +13,20 @@ public static class ConsoleUI
         while (true)
         {
             string input = Console.ReadLine();
-            if (input == TWO_PLAYERS_MODE)
+
+            if (int.TryParse(input, out int gameMode))
             {
-                return false; // Play against another player
+                if (gameMode == TWO_PLAYERS_MODE)
+                {
+                    return false; // Play against another player
+                }
+                if (gameMode == PLAY_AGAINST_AI)
+                {
+                    return true; // Play against AI
+                }
             }
-            else if (input == PLAY_AGAINST_AI)
-            {
-                return true; // Play against AI
-            }
-            else
-            {
-                DisplayMessage(""Invalid input. Please enter {TWO_PLAYERS_MODE } or { PLAY_AGAINST_AI}.");
-            }
+
+            DisplayMessage($"Invalid input. Please enter {TWO_PLAYERS_MODE} or {PLAY_AGAINST_AI}.");
         }
     }
 
